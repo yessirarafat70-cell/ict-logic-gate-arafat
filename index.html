@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSFiddle vhac8zyn</title>
+
+  <style>
+    
+  </style>
+
+  
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডিজিটাল লজিক সার্কিট ল্যাব (Digital Logic Lab)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Hind Siliguri for Bengali & Orbitron/Poppins for Designer Name -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Orbitron:wght@600;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                        brand: ['Orbitron', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        panelBg: '#334155',
+                        accentBlue: '#3b82f6',
+                        accentGreen: '#10b981',
+                        accentRed: '#ef4444',
+                        accentYellow: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            user-select: none;
+        }
+        /* Grid background for simulator canvas */
+        .canvas-grid {
+            background-size: 20px 20px;
+            background-image: 
+                radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        
+        /* Glowing Gradient Animation for Creator Badge */
+        @keyframes glowBorder {
+            0% { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+            50% { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.8); }
+            100% { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        }
+        .creator-badge {
+            animation: glowBorder 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col overflow-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex justify-between items-center z-20 shadow-lg">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <div class="bg-blue-600 text-white p-2 rounded-lg text-xl font-bold flex items-center justify-center w-10 h-10 shadow-md">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-wide flex items-center gap-2">
+                    ডিজিটাল লজিক ল্যাব 
+                    <span class="text-xs px-2 py-0.5 bg-blue-900 text-blue-300 rounded-full border border-blue-700">v2.0</span>
+                </h1>
+                <p class="text-xs text-slate-400">ইন্টারেক্টিভ সার্কিট সিমুলেটর ও লার্নিং প্ল্যাটফর্ম</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Prominent Designer / Creator Branding Box -->
+        <div class="creator-badge hidden md:flex items-center gap-3 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 border-2 border-blue-500 px-4 py-1.5 rounded-xl shadow-xl">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACgAKADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDy34b3VxrXxS0+yVGlitrqS5KA9SoJz+le9+EPEdmsV/aaheLFcQ6hcJslbBVdwIH614R+zPB9o+KF7MRkxW0zD2yQP617t8NLVZR4ivNiu51ibbkZyFODXPPQa3OgGvaOemoQHHHDZp41nST01C3/AO+60vstt/zwi5/2BUZsrQnm1gP/AGzFRqUVF1XTM/8AH/bf9/BUq6npxHy39sf+2gqQ6dp562NsfrEKadK0vOTptof+2Qo1AfHqFkx4vLc/SQVMLq2I4uIj/wADFVhpGkH/AJhVl/36FB0bRiMHSLM/8A/+vTAsmWJhxKn/AH0KaWQ/xr+dV/7E0Q9dJtvw3D+tN/sHQyP+QXF+Ejj+tAFj5T3H50m0VVPh/RB0sHX6XDj+tNbw9pBHyRXSc9rt6dwLm2m7aq/2Bpw5Euor9Lo006FaY+W91VfpcZ/pQmIubfrQVqg2gRH7ur6sp95AajOgyj7mvakPqAaq4WNEqT1o24rOXQrwdPEV7+MSmpBpF+B8viGc/wC9bKaLhYuFaTbVNtL1X+HXwf8AetB/jTW07XAPl1q2b/etSP607g0fPv7MUDW3xG1yOUbWS1cH/v4K9w+Dx8zwxJc/8/V7cTf99SEj9MV5/pHhy88PeMtc1e1hJFxZS28Sgfem3fKP/Hgfwr1L4f2K6b4fisU5Fu5iyO+0AE/nmom7sIo6IrTCvPFTkZNIRSKIcGjBqQgZox7UCIwKZLLDEcSSpH6bmA/nXIfGTx3beAfC5vyiTX9wxis4C2N7Y5Y/7K9/qB3r5D13xh4j8QalLf6rql1I8hJ2I5WNAeyqOAKuMbhc+yfG3jjw34QtBNq9/Grt92CNg0rf8BHOPevOb39oXw8qMbbRtRmOPlyyp/jXzPPLJMFkkleQngliST+J5ppk2jEeC2M9KrkC57vc/tEam9yptvD9tHb91luCzH6EAY/Wtjwv8f7OW/Fvr+l/Y7ZzhJ4ZDJsP+0COnuK+ao7oNIUkwDVqZsovlPgnv6/WnyIVz74028tNSsYb6wnjuLaZA8ciHKsp6EGrGz618e/CP4pap4KnjgYNd6Sz5uLNjgpnq0Z/hPt0P619c+HNXsNf0W21fTJhNa3Kb0YfqCOxHQioasBY20bKsbaaUFCAgK80m2pytG2mBDtpCpFTlaaV5oQiobOAyl3iRmD7lJHQ+tVvCfzaa7etxIf/AB6taZcDcKyvCI/4lAPrK5/8erJ7mhuooZRSlaW35yKlAoAr7KawxVrbXkn7T3jS98JeDYLPTcJd6u724mzzFGF+cj35AB7ZprV2EfPnxz8Tt4p+It9cGUva2jG0tEByFVDyR9WyfeuDPyHcnyDPLVUkJ805Pfse1dP4P8O3XiK7yrFYEGOBWtScaUeaWw6VKVWXLFamG28ggqCGHVaVFfby2Pw616yPhiJowsd2yj+6EBOa19C+F9tZy+dcF5MdN4rglmtBK9z0o5PXb1PE4NE1C7OEtJQCMqSuM0660+/sgFuoJAPXHavpS10NYFKJEuxeAe4qpqHh60nXEsCP7belcqzdt6rQ63kseX4tT5qeTLBkIDr2P8XtXsPwV+K58I6Td6PcxNLbyyieBmkwIyRhk6HgnBz7e9Z3jDwFbPKZLZfKc88dK861XS73SbnyZ0JDcqexxXqUcTTrrQ8jEYSpQfvbH3L4D8UQeJtKS7XaJM4lRXDbCeRyOCMehNdPjPavjj4A+Itd0zxrZ2ukvLLFdOFuLQk7XUdSR6gZ5619lpyoODz61o1Y5iIr7UbalIpMUARFOKTbUh6UwnFNCMaTUdbdG2+HZBxwHuFBqbwzb3FtoltHdQ+TNtLSR7g20k5xkcGtgMsih1PykZBxioyMHFY2NCSDgg1b28dKqw9RV6IZSgCPZXy1+2zdltf8PWHl4EVrLNuz13OBjH/Af1r6s2mvlL9tyB18XeHpygCPYSJnHJIkyf8A0IVdP4hPY8K8P6Pc61fR2lvgOzAEnoB719B+D9BstD0yK0tULFRhnPVj3NcL8H9KSKzl1SUDqVQnsAOTXUyeINUldTpOnSyQjlSyktL7hRzivKx8515+zjsj3svpww9NVJbs76wsZ5FDAYAq4ba5VcEZH0rkdL8dalYRBNQ8NXyZ6tsIx79K7fQfEum6tGpi2gkfMCRlfrXj1MNUhq0epDExnsV1hk2H171VuLacqdijP0rqAlr94sMfWsjWNc0uwVgQXwMkAVlCEm9C3VSOU1KxYowlj5JzkCvNvibpEf8AYhmCkmF9wPcA12ut/EC0cmO10u6J9SODWN/aVn4jtrrTJI2huHjbajjG7jtnuK9XD06tKSk0cOIq0q0HC+pzn7M6TzfFjTDCxBiSV5CB1QJyD+Yr7J3ivk79lGyaT4n3kzxMVtLCVjt6qSyqOO/UivoK68deH4dXfS994blDhl+zPgH64xXvTmkz5dRbOuZx0pM+lQWkqzQrKiNtYZGRg1YXPpQtRMaVJpfLqdIy1SCEY5FOwHH+B/GOi+MNLe+0W7M0cT+XKroUkRuvzKfUdD3roAwzXlPwc8If8IX4YGrQ3UtxHdsn9oiRQrR5GY2CjooDDJP972r0y2u4ZZ5bdJFM0IXzE7rkZH51np0KNGPqKvQniqEDZFXU4X6UhlgAYrwD9tjTVn8HaDqSoTJbag0RbHRZE7/ior3tZB2NcF8d7bR9Z+Hmq6Jf3drHevbNc2MckgVvNj+ZSPxBHvyKpNR1YKLloj5x8HXk1n4asbC0svtU1z5pYFtqogzkk+545xXeW2uWOlafbwIFDyRqXI+XexAyPUntj8K5j4caVbz6Lb3VysrB2bZExIUAMQDt9TyefWvQYtNsJbqwv440gmtmEcrBASSMYP5V5sYUqtSabtb8dbfgfQxdSnTg0r3/AA0v+Jzq+K9Eu3EYTLscLuhcbjzwCR7H8qvNHYvpj6taqA0KF0dACcjnb7g4xWle+H9Gh1Ka80bSY7a687zIblGIO453HacgdePSk8TGK2gW1SONpbplCxnJLnA3sccAD9SRXXLC4JSlFVtl2vd66dO2/mclPF4504zlQ1b2uk0tNevfbyZmXPi+/jsjLL4av44QvEiTxO34oDn+dRXEVgkKX2oyKxlUMN5yOeeAeAP51paxZ7NE8nuUAHHSobcC+0WCaCwijmjAjGCW2fwupDZ568ivNwkKU4Sk5KNvXU7sTOrTqRjCDlf0svXZ/cmZMWveGVZYrafTt56KMAn6HAqe4NjKLfUQdot5F3b+doY7SQx5HX1IxW1oeiW0b3MSQrcw+UFijunLFQy4cAHio9e8M2+k+HvLt7doDJ8myTLRv39eMY7e1fQ4rKcPDDrEUKvMut1b1PDw+aYmpXeHxFDkfSzT9CX9kDQXhPinxBLb7ftFytpC5HUIzM4H4lfyr0OXQnu/iVIHT/RIkE7jbwc8Dn6g10fgPTRpPhDTLPEHmLbo0rQptVnKgk4/qeT1NR6LqkF74y1u0jJLWiQxtz3G7P05IrmqQUrXMIycW7Gs9uOwFMMB9KnuLu2gGZZVH41j3fijTo3McT+Y/YIM1d0ibNmmkbDtUoWsSHV724OYbWRVP94Vp2s90wHnW4/A4qou4mrHN6OkNhomnXU0Ye0NjFb30ZGQ0RQDcf8AdyT9Ca5Pxpq174QvobW0sYb25YmNZncqZLcDcjZGc45H1Fdr4Yllk0eOyvo4kvbWJIrmNDuQnaMMp7qw6H61h6xZrOP7MnjWWewUz2O8Z863/ji5/iXt7bfesdii54J8Qw69avNFFLG8LBJVdcANjse9dWv3K5Twl5Vu4s4wotpl822wMD3FdWBtTFTB3KkrGHPqLw3TxEEgHg15t40toLvx7PqFw8in7FGgOMgABuMemcV6Berm9kOO9cL8R5DZ3trI1uZIriIxOUI3gBsnA78GozFN0HY7craWIV+qOS8PzRXDl49vlmRiNvT7xrqRYxzbZIpnikAxuRsEj0I6H8a860W/jXUb+2hbaiz7owRtwrKGAI/Gu50y5lcJHGASRyfp2rwKsJRldH0EJpotzWOoRws41eRABn/VIf6VgQR29vcDWNS1IMrfKr3EiqcZ7dAB7CuuupYxbkOR93ktXl/iPW9NS9EVpaQX2ZML58SyIh/2cjI/CnQUptodScYK7PQtauNKTTPNluVVTgZkYKOfcmsHS4b7T71o7SW2mhnPmbJCQM9Mhh07eua4y/1W5urArBpyPLyphlj3rHg8YU8YrS8C+ILFpEt7iAWc5OAjcL9AOi/St/YShBtamEa0ZSsz0C1udStJvObS4weQMThlIPrwKg8RXk9/EpnWOFU+7ChJVfXk9SauXV0rWoeI8gVyOpX7lldjhVyXB7Y6iilXrSh7JO0ewqtOCl7RrVHpXwou9e1fTdVgudZaCCC88m1Mh3PtCDIBPQe3ataHwbd2F3c6hYawttdXBzNNIN3mc5+bPWsn4dJE/haGSIg75HZm7E56it6aESoUfLL6E17tKlzU4tvofOYiaVWSSHpBHdbUvLu2Z4+HNuPvn15NalpFplsB5UCA+uK5aXS2R91uxU+xqxAl0nEnI+ta0oqPxIxk77M6wXkCjgAD2pft0Vc0EPqc/Wja394/nW/umWpAWurDUYlSPe0SMEwfmmizkxfUfeX6Ed60dTt01OyiurGZROmJrWb0bHGfYjII9CaL2NdSsVlgYxzIQ6N0KMOlZ+jagkN35LqIoriTDJ/zwnPUf7r9R759a4Ebsr6JIk7SWixi3nLtPbKx5ilU/vIvzyfoa6XRdVh1ewaeJXR4mKSI6EEMCQevXkGq0Gh2ba8dZLTeemAED/uy20jcV/vYOM+wqxNqMVrK8Pl4Gc4VacIPmugvpYzbjm6kPvXP+ONGl1fSo1tk3zQS+YAMbiMEEDPfp+VbxbfKzgEA881Ig5rapFTi4vqOlUdOSkuh8x+JdPutD8dXMVxA1u0qRSIjOCdpXGTjvlTXYeFdQD3WC+dgIGfX/wDVU37R+kulzpPiGBOMNaTMPX7yZ+vzD8K4bw7dOt3G6naqHLAfxdhn88/hXmYrDq1kevhMQ5avqafjDW9R1LVJtMheSO1XC4Tl5Wz0Ht70/QtLuYI1WSAWiDgs0ZkY/iOB+H51s6BPZPdNceWjSsTuYCugu9s0H7r5CehU4rk9pyJQSPQhTTlzt3MVoHaZyLsltm3f5bfrxXJ+IdNvZs74XuIlORMq7XXHfH8X866r+z7kXRkl1CQpn7gb/wCtWuvlQW2GXdxjJ5NV7bk2CpFVFZqxzfgfU7u4065srxiZIFHlv2cetZXiG5muZUjtslp/kwO+44q3qN7Bby3kNvtjZl5AGCcjjFafwW0x7/xkt1LuaKwjM3PIDkbV/Uk/hXTh6PPU5tjz8VW9nT5dz2rQ7UWmjWVt5XlmOBAykYIbGTn8c1bK+1O3AUma9hKyseE3d3GlfamlRT/emmmIbtFJtp9FAGVaXhgIu4nZoiMOh7Uuq6Uuoul3ZMv7wbJAejKfX3HX8KxbSZ4I2LDcrdQehrT8L3vla2lnG6tFcZIQnlSB2rkaNUzp/DUl01hJFfMrXMMhjkIPLADhj6Eis/URm+eukCgLkAZPXA61zt6P9Ok+tVAGMQYFSimqOKfitAOe+I1ha6l4H1a3uow6rbtIhPVXXlWHuDXzLdTy2LlHQxSKME9nGeor6Z+IuqWGneGbqC8nEUl5G0FupUnzHI4XI74z19K8jvNAt9QsxvjV+Mg4rixVZU5pS2PUwFB1Kcmtzz/S9fuLG4kkZjh1LZK9Pc9/wreHjSVYozHMMPkH296raj4NCHKoVYcZU4NYdx4N1MoTEglGcgHgmknh6mrLlDE09EbMfjO5e/EAlUqAqlgOpzzUl74xuDcGKNleMYxg847/AK1zH/CKaopUtYMPrIcVsaL4XmWXbdBYgeycn8zWnJh1qY82K2sXNHstW1rUvKjhllnnfaqAZP8A+qvon4deGV8M6F9nkIa7nYSXDA55xgD8P6muW+DOm2tpfXBtodpERy7cs2SO9eoYrpo8rV4nDiHJS5ZDcCk204UuK2OcYVppFSGkxQBHijFPwKXaKAOWu7R0Xbt4FZ2hoB8SdETHSG6f8kA/rXf6lpwxuAGGPBrlNPthF8UdOjx9zTrl/wA2QVztFJ6noY+5XP3ag3khz/FXRKPlrnLg5upP96lAtgo4qTHrTV7AAn6VNDG7yAMMA8gZ5NbRg2K5R13w1YeJdHew1BWX5hJFKn34pB91h9PTuMivOr7w/qPh25W2vow0THEVwg/dy/T0P+yefr1r2eBNtS3Vtb3lq9tdQpNC4wyOMg1OKwMcRHszqwmNlh33TPDrm2jmj3BeRVM2sa9B0r0DxJ4Onsg9zpQa5twCWgJzIn0/vD26/WuMOx+VxivnK1Cph5cs0fR0cRTrxvBmXeRxGPCD5z3qlFZLv3N1FbE0UYy2BVKWSKKJmdgqiiEn0Lkkzovh5qlnp+rx2EpPnX7GKLHYqpbn2OMfU16XivPfh54JuhrEHifWEa3EKMLK1YfPlhgyOO3HRevOT2Fek+U7TMiKWOTwK+hw8JU6S5j5bGyjKs3EgxQRVz7Hcj/l3lH/AAGka0uFGTBL/wB8GtuZdzlsyoRTcGrbW8yjmGTH+4aiaKTvG4/4CaLoRBRUhQgZ2n8qbtFFwNLxTq+gaPcR2OoavYwXj8rbGZfNY+gTqT7V494l8cD/AIS9b3wxbRLqy2T2cNprSvabyXDeYnZ/u9ARXGWUj6pBd22hh9UEY3XvhvWgTPGc8+VI2WB9MkjpyKuaVajVNJ0wwxT634Wv5jbXFnefPd6ZIucsGzuKqRg5ORxg818xUzPEVJctONvLd9/+G6PpI9iGDowV5O/9f16djh/GHxM+K8eshNW1vUNJuI+VgtlEEePUBeGHuSa9A+DXxZv9f1i30DxJHHJdz58m8jXb5pAJKyKOAcA/MOOOR3pdQ8Gahr+gSeG71Gvlgvi+m6jcP/pEVuMYVzjk9QT6Y713fw8+HeieErcSWttHJelcPcsuXPsCeg+lfS4GNWpTUq0eV/1r5ejPMrqMZWg7o7exmWRSAuASQPpSSH7NPvP1Hv6inQAKOO1TTxrPDtavQcTG5bgdJIlkjYMrDIIqYHisjT2e2kKk7oSfmHdT61qhgQCCCD0IpWHcVmI5BNcL498OW1yxv9PkittQkzmInC3Prgdm9x17+tHxk+Idl4A0FJhGt1qt2SllaknaSOrvjoi5+pPA7kfNOq61f67qJ1rVL6a6u5uVcyFSPYY+6o7AVz4iFOceWaud2Bp1Obng7W/E9autF8QpcJbHRrwzSHao2gLn3f7oH416B4L8DWmkbL/VhHe6oPmXjMVufRAep/2jz6Yr5tsPHnjHTF8uHX7trfp5N03nxkem1wTiu3+Fnxju7DU4tH8U3b3en3MhCXTqd9ox6Z9YvXuvUcZFc2GwdGlK61fmdWMrYicbdPI+g5myc1c8PX2nwauHvkGzy9uSuQCe5FZ28PGroyujAFWU5DA9CD3FULtwJwo64runBTVmeMnY9TZtHhMZxEqT8o45Qn69BTNT0wSy2xhAAEmWGcAjFedRsxKMGYbTkjPDD0Ncl4x8c654e8ZW1xD9sgsUQLAJpN8b/wB9Qen4HmuOpgKUuhSqyjrc9yuLCTy2VVJJGAA5rK8TWs9lpYmSd1O8KT5hJ5pPA3jzR/FFgsiSpb3OQrxO2AWP909/p1rS8aJ5mjhfWZK8qpllOEZSTd15nRCtK6TKMcTi1U5kHyD+LPaqc8DJaSyFpSwViCxFb5tiIAuT93HNcT8U/iR4N+H+nta63dyT6hcRExWltH5kuD/EeQFGe5IrwKWFxNebjGTVvNnQ60I6tH//2Q==" alt="MD YEASIR ARAFAT" class="w-11 h-11 rounded-full object-cover border-2 border-yellow-400 shadow-lg shadow-blue-900/60 flex-shrink-0">
+            <div class="flex flex-col">
+                <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Created & Designed By
+                </span>
+                <span class="font-brand text-sm md:text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-white to-cyan-300 tracking-wider">
+                    MD YEASIR ARAFAT
+                </span>
+            </div>
+        </div>
+
+        <!-- Tab Buttons -->
+        <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700">
+            <button id="tab-builder" onclick="switchTab('builder')" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-blue-600 text-white shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-diagram-project"></i> ফ্রি সার্কিট বিল্ডার
+            </button>
+            <button id="tab-modules" onclick="switchTab('modules')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center gap-2">
+                <i class="fa-solid fa-calculator"></i> কনভার্টার ও মডিউল
+            </button>
+            <button id="tab-tasks" onclick="switchTab('tasks')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center gap-2 relative">
+                <i class="fa-solid fa-trophy text-yellow-500"></i> সার্কিট চ্যালেঞ্জ
+                <span id="task-badge" class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">4</span>
+            </button>
+        </nav>
+
+        <!-- Global Action Controls -->
+        <div class="flex items-center space-x-2 space-x-reverse">
+            <button onclick="clearCanvas()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs rounded-lg border border-slate-700 transition flex items-center gap-1">
+                <i class="fa-solid fa-trash-can"></i> পরিষ্কার করুন
+            </button>
+            <div class="h-6 w-px bg-slate-700 mx-1"></div>
+            <div id="simulation-status" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-lg">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                সিমুলেশন রানিং
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Panels -->
+    <main class="flex-1 flex overflow-hidden relative">
+
+        <!-- ================= TAB 1: CIRCUIT BUILDER WORKSPACE ================= -->
+        <div id="view-builder" class="flex-1 flex w-full h-full relative">
+            
+            <!-- Sidebar / Component Palette -->
+            <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col z-10 shadow-xl">
+                <div class="p-3 bg-slate-800 border-b border-slate-700 font-semibold text-sm text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-blue-400"></i> কম্পোনেন্ট প্যালেট
+                </div>
+                <div class="flex-1 overflow-y-auto p-3 space-y-4">
+                    
+                    <!-- Basic Inputs & Outputs -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block mb-2">ইনপুট ও আউটপুট</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addComponent('INPUT')" class="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-500 rounded-lg text-left transition group">
+                                <div class="text-blue-400 font-bold text-xs group-hover:text-blue-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-toggle-on"></i> সুইচ (Input)
+                                </div>
+                                <span class="text-[10px] text-slate-400 block mt-0.5">HIGH / LOW ইনপুট</span>
+                            </button>
+                            <button onclick="addComponent('OUTPUT')" class="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500 rounded-lg text-left transition group">
+                                <div class="text-emerald-400 font-bold text-xs group-hover:text-emerald-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-lightbulb"></i> এলইডি (LED)
+                                </div>
+                                <span class="text-[10px] text-slate-400 block mt-0.5">আউটপুট নির্দেশক</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Basic Logic Gates -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block mb-2">মৌলিক লজিক গেট</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addComponent('NOT')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">NOT Gate</span>
+                                <span class="text-[10px] text-slate-400">ইনভার্টার (Inverter)</span>
+                            </button>
+                            <button onclick="addComponent('AND')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">AND Gate</span>
+                                <span class="text-[10px] text-slate-400">গুণক লজিক</span>
+                            </button>
+                            <button onclick="addComponent('OR')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">OR Gate</span>
+                                <span class="text-[10px] text-slate-400">যোগক লজিক</span>
+                            </button>
+                            <button onclick="addComponent('XOR')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">XOR Gate</span>
+                                <span class="text-[10px] text-slate-400">এক্সক্লুসিভ OR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Universal & Compound Gates -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block mb-2">সর্বজনীন ও যৌগিক গেট</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addComponent('NAND')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">NAND Gate</span>
+                                <span class="text-[10px] text-slate-400">NOT + AND</span>
+                            </button>
+                            <button onclick="addComponent('NOR')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-500 rounded-lg transition text-left">
+                                <span class="text-xs font-bold text-slate-200 block">NOR Gate</span>
+                                <span class="text-[10px] text-slate-400">NOT + OR</span>
+                            </button>
+                            <button onclick="addComponent('XNOR')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-500 rounded-lg transition text-left col-span-2">
+                                <span class="text-xs font-bold text-slate-200 block">XNOR Gate</span>
+                                <span class="text-[10px] text-slate-400">NOT + XOR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Combinational Modules -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block mb-2">অ্যাডভান্সড মডিউল</span>
+                        <div class="space-y-2">
+                            <button onclick="addComponent('HALF_ADDER')" class="w-full p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-500 rounded-lg transition text-left flex justify-between items-center">
+                                <div>
+                                    <span class="text-xs font-bold text-amber-400 block">হাফ অ্যাডার (Half Adder)</span>
+                                    <span class="text-[10px] text-slate-400">Sum ও Carry আউটপুট</span>
+                                </div>
+                                <i class="fa-solid fa-plus text-slate-500 text-xs"></i>
+                            </button>
+                            <button onclick="addComponent('FULL_ADDER')" class="w-full p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-500 rounded-lg transition text-left flex justify-between items-center">
+                                <div>
+                                    <span class="text-xs font-bold text-amber-400 block">ফুল অ্যাডার (Full Adder)</span>
+                                    <span class="text-[10px] text-slate-400">Cin, Sum ও Carry Out</span>
+                                </div>
+                                <i class="fa-solid fa-calculator text-slate-500 text-xs"></i>
+                            </button>
+                            <button onclick="addComponent('DECODER_2TO4')" class="w-full p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-500 rounded-lg transition text-left flex justify-between items-center">
+                                <div>
+                                    <span class="text-xs font-bold text-cyan-400 block">২-থেকে-৪ ডিকোডার</span>
+                                    <span class="text-[10px] text-slate-400">2 In → 4 Line Out</span>
+                                </div>
+                                <i class="fa-solid fa-arrow-right-arrows-split text-slate-500 text-xs"></i>
+                            </button>
+                            <button onclick="addComponent('ENCODER_4TO2')" class="w-full p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-500 rounded-lg transition text-left flex justify-between items-center">
+                                <div>
+                                    <span class="text-xs font-bold text-cyan-400 block">৪-থেকে-২ এনকোডার</span>
+                                    <span class="text-[10px] text-slate-400">4 Line In → 2 Binary Out</span>
+                                </div>
+                                <i class="fa-solid fa-compress text-slate-500 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Guidance & Stylized Creator Footer -->
+                <div class="p-3 bg-slate-950 border-t border-slate-800 text-[11px] text-slate-400">
+                    <p><i class="fa-solid fa-info-circle text-blue-400 mr-1"></i> সংযোগ করতে পোর্টে ক্লিক করে অন্য পোর্টে ড্র্যাগ করুন।</p>
+                    
+                    <!-- Prominent Sidebar Creator Credit -->
+                    <div class="mt-3 pt-2.5 border-t border-slate-800/80 bg-gradient-to-r from-blue-950/40 to-slate-900 p-2 rounded-lg border border-blue-500/30 flex items-center justify-between">
+                        <img src="data:image/jpeg;base64,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" alt="MD YEASIR ARAFAT" class="w-8 h-8 rounded-full object-cover border border-cyan-400 flex-shrink-0 mr-2">
+                        <div class="flex-1 flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-semibold uppercase">Developer:</span>
+                            <span class="font-brand text-xs font-bold text-cyan-300 tracking-wide flex items-center gap-1">
+                                <i class="fa-solid fa-code text-blue-400 text-[10px]"></i> MD YEASIR ARAFAT
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Interactive Canvas -->
+            <div id="canvas-container" class="flex-1 h-full w-full relative bg-slate-950 canvas-grid overflow-hidden cursor-crosshair">
+                <svg id="wire-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0">
+                    <!-- Dynamic wires render here -->
+                </svg>
+
+                <!-- Floating Active Wiring Line Preview -->
+                <svg id="preview-wire-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10">
+                    <path id="preview-wire" d="" stroke="#3b82f6" stroke-width="3" stroke-dasharray="5,5" fill="none" class="hidden" />
+                </svg>
+
+                <!-- Container for draggable HTML component nodes -->
+                <div id="nodes-container" class="absolute inset-0 z-10 pointer-events-auto"></div>
+
+                <!-- On-Canvas Control Bar -->
+                <div class="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-md p-2 rounded-xl border border-slate-800 flex items-center gap-2 shadow-2xl z-20">
+                    <button onclick="zoomCanvas(0.1)" class="p-2 hover:bg-slate-800 text-slate-300 rounded-lg transition"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                    <button onclick="zoomCanvas(-0.1)" class="p-2 hover:bg-slate-800 text-slate-300 rounded-lg transition"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                    <button onclick="resetZoom()" class="px-2 py-1 hover:bg-slate-800 text-xs text-slate-300 rounded-lg transition">100%</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 2: CONVERTERS & MODULE STUDY ================= -->
+        <div id="view-modules" class="flex-1 hidden w-full h-full overflow-y-auto p-6 bg-slate-950">
+            <div class="max-w-6xl mx-auto space-y-8">
+                
+                <!-- Section Header -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-blue-500"></i> ডিজিটাল সিস্টেম মডিউল ও কনভার্টার
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1">বাইনারি এনকোডার, ডিকোডার, এবং অ্যাডারের অভ্যন্তরীণ কাজের পদ্ধতি এবং টুথ টেবল ভিজ্যুয়ালাইজেশন।</p>
+                </div>
+
+                <!-- 1. Binary & Decimal Converter Block -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-right-left"></i> ১. বাইনারি ↔ ডেসিমেল লাইভ কনভার্টার ও টুথ টেবল
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Interactive Input Panel -->
+                        <div class="bg-slate-800/60 p-5 rounded-xl border border-slate-700/60 space-y-4">
+                            <label class="block text-xs font-bold text-slate-400 uppercase">ডেসিমেল নম্বর (0 - 15)</label>
+                            <input type="number" id="converter-decimal-input" min="0" max="15" value="9" oninput="updateLiveConverter('decimal')" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-xl font-mono text-emerald-400 focus:outline-none focus:border-blue-500">
+
+                            <label class="block text-xs font-bold text-slate-400 uppercase mt-4">বাইনারি বিট রিপ্রেজেন্টেশন (4-Bit)</label>
+                            <div class="flex items-center justify-between gap-2" id="binary-bit-switches">
+                                <!-- Dynamic Bits Rendered via JS -->
+                            </div>
+
+                            <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-sm text-slate-300 font-mono flex justify-between">
+                                <span>হেক্সাডেসিমেল: <strong id="hex-output" class="text-yellow-400">0x9</strong></span>
+                                <span>অক্টাল: <strong id="octal-output" class="text-cyan-400">11</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Decoder Truth Table Generator -->
+                        <div class="bg-slate-800/60 p-5 rounded-xl border border-slate-700/60">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase mb-3">২-থেকে-৪ ডিকোডার টুথ টেবল (Truth Table)</h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-center border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-900 text-slate-300 border-b border-slate-700">
+                                            <th class="p-2 border border-slate-700">A</th>
+                                            <th class="p-2 border border-slate-700">B</th>
+                                            <th class="p-2 border border-slate-700 text-emerald-400">Y0</th>
+                                            <th class="p-2 border border-slate-700 text-emerald-400">Y1</th>
+                                            <th class="p-2 border border-slate-700 text-emerald-400">Y2</th>
+                                            <th class="p-2 border border-slate-700 text-emerald-400">Y3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="decoder-truth-table-body">
+                                        <!-- Table Rows filled by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Half & Full Adder Deconstructive Study -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip"></i> ২. অ্যাডার সার্কিট ডিকম্পোজিশন (Adder Gate Analysis)
+                    </h3>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Half Adder Interactive Simulation -->
+                        <div class="bg-slate-800/60 p-5 rounded-xl border border-slate-700/60 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-white text-base mb-1">হাফ অ্যাডার (Half Adder)</h4>
+                                <p class="text-xs text-slate-400 mb-4">২টি ১-বিট ইনপুট যোগ করে Sum = A ⊕ B এবং Carry = A · B তৈরি করে।</p>
+                                
+                                <div class="flex items-center justify-around bg-slate-950 p-4 rounded-xl border border-slate-800 my-4">
+                                    <div class="flex flex-col gap-2">
+                                        <button id="ha-btn-a" onclick="toggleAdderInput('ha','a')" class="px-3 py-1.5 bg-slate-800 border border-slate-600 rounded text-xs font-mono font-bold text-blue-400">A = 0</button>
+                                        <button id="ha-btn-b" onclick="toggleAdderInput('ha','b')" class="px-3 py-1.5 bg-slate-800 border border-slate-600 rounded text-xs font-mono font-bold text-blue-400">B = 0</button>
+                                    </div>
+                                    <div class="text-center px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg">
+                                        <i class="fa-solid fa-arrow-right text-slate-500"></i>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <span id="ha-out-sum" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold text-emerald-400">Sum (XOR) = 0</span>
+                                        <span id="ha-out-carry" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold text-yellow-400">Carry (AND) = 0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Truth Table -->
+                            <table class="w-full text-[11px] text-center border-collapse mt-2">
+                                <thead class="bg-slate-900 text-slate-300">
+                                    <tr><th class="p-1 border border-slate-700">A</th><th class="p-1 border border-slate-700">B</th><th class="p-1 border border-slate-700 text-emerald-400">Sum (S)</th><th class="p-1 border border-slate-700 text-yellow-400">Carry (C)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-800"><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800">0</td></tr>
+                                    <tr class="border-b border-slate-800"><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800">1</td><td class="p-1 border border-slate-800 text-emerald-400 font-bold">1</td><td class="p-1 border border-slate-800">0</td></tr>
+                                    <tr class="border-b border-slate-800"><td class="p-1 border border-slate-800">1</td><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800 text-emerald-400 font-bold">1</td><td class="p-1 border border-slate-800">0</td></tr>
+                                    <tr class="border-b border-slate-800"><td class="p-1 border border-slate-800">1</td><td class="p-1 border border-slate-800">1</td><td class="p-1 border border-slate-800">0</td><td class="p-1 border border-slate-800 text-yellow-400 font-bold">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Full Adder Interactive Simulation -->
+                        <div class="bg-slate-800/60 p-5 rounded-xl border border-slate-700/60 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-white text-base mb-1">ফুল অ্যাডার (Full Adder)</h4>
+                                <p class="text-xs text-slate-400 mb-4">৩টি ১-বিট ইনপুট (A, B, Carry-In) যোগ করে Sum ও Carry-Out তৈরি করে।</p>
+                                
+                                <div class="flex items-center justify-around bg-slate-950 p-3 rounded-xl border border-slate-800 my-4">
+                                    <div class="flex flex-col gap-1.5">
+                                        <button id="fa-btn-a" onclick="toggleAdderInput('fa','a')" class="px-2.5 py-1 bg-slate-800 border border-slate-600 rounded text-xs font-mono font-bold text-blue-400">A = 0</button>
+                                        <button id="fa-btn-b" onclick="toggleAdderInput('fa','b')" class="px-2.5 py-1 bg-slate-800 border border-slate-600 rounded text-xs font-mono font-bold text-blue-400">B = 0</button>
+                                        <button id="fa-btn-cin" onclick="toggleAdderInput('fa','cin')" class="px-2.5 py-1 bg-slate-800 border border-slate-600 rounded text-xs font-mono font-bold text-purple-400">Cin = 0</button>
+                                    </div>
+                                    <div class="text-center px-3 py-1 bg-slate-900 border border-slate-800 rounded-lg">
+                                        <i class="fa-solid fa-arrow-right text-slate-500"></i>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <span id="fa-out-sum" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold text-emerald-400">Sum = 0</span>
+                                        <span id="fa-out-cout" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold text-yellow-400">Cout = 0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-[11px] text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800 font-mono">
+                                লজিক সমীকরণ:<br>
+                                <span class="text-emerald-400">Sum = A ⊕ B ⊕ Cin</span><br>
+                                <span class="text-yellow-400">Cout = (A · B) + (Cin · (A ⊕ B))</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: GAMIFIED CIRCUIT TASKS ================= -->
+        <div id="view-tasks" class="flex-1 hidden w-full h-full overflow-y-auto p-6 bg-slate-950">
+            <div class="max-w-5xl mx-auto space-y-6">
+                
+                <!-- Challenge Banner -->
+                <div class="bg-gradient-to-r from-blue-900/60 to-purple-900/60 border border-blue-700/50 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-2xl">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-trophy text-yellow-400"></i> লজিক সার্কিট পাজল ও মিশন
+                        </h2>
+                        <p class="text-slate-300 text-sm mt-1">সহজ থেকে কঠিন ধাঁধা সমাধান করুন। সার্কিট তৈরি করে 'যাচাই করুন' বোতামে চাপ দিন।</p>
+                    </div>
+                    <div class="bg-slate-900/80 px-5 py-3 rounded-xl border border-slate-700 text-center">
+                        <span class="text-xs text-slate-400 uppercase font-bold block">আপনার স্কোর</span>
+                        <span id="user-score" class="text-2xl font-black text-yellow-400">0 XP</span>
+                    </div>
+                </div>
+
+                <!-- Levels Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="tasks-list-container">
+                    <!-- Dynamic tasks rendered via JavaScript -->
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Task Execution Modal / Overlay Bar -->
+    <div id="task-active-bar" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 border-2 border-yellow-500/80 text-white px-6 py-3 rounded-2xl shadow-2xl z-30 flex items-center gap-6">
+        <div>
+            <span id="active-task-title" class="text-sm font-bold text-yellow-400 block">লেভেল ১: NOT গেট মিশন</span>
+            <span id="active-task-desc" class="text-xs text-slate-300">সুইচ অফ থাকলে এলইডি জ্বালাতে হবে।</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="verifyActiveTask()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition shadow-lg flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check"></i> সার্কিট যাচাই করুন
+            </button>
+            <button onclick="cancelActiveTask()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs rounded-lg transition">
+                বাতিল
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN SIMULATION & INTERACTIVE JAVASCRIPT ENGINE -->
+    <script>
+        // Global Application State
+        const state = {
+            components: [],
+            wires: [],
+            nextId: 1,
+            selectedPort: null,
+            isWiring: false,
+            wireStartPort: null,
+            activeTab: 'builder',
+            userScore: 0,
+            activeTaskId: null,
+            zoomLevel: 1.0,
+            converterBits: [1, 0, 0, 1], // Default binary 1001 = 9
+            adderInputs: {
+                ha: { a: 0, b: 0 },
+                fa: { a: 0, b: 0, cin: 0 }
+            }
+        };
+
+        // Tasks / Gamification Data Definition
+        const TASKS = [
+            {
+                id: 1,
+                title: "লেভেল ১: ইনভার্টার সিস্টেম (NOT Gate)",
+                difficulty: "সহজ",
+                difficultyClass: "text-emerald-400 bg-emerald-950 border-emerald-800",
+                points: 100,
+                desc: "এমন একটি সার্কিট তৈরি করুন যেখানে ইনপুট সুইচ বন্ধ (LOW/0) থাকলে এলইডি লাইট জ্বলবে (HIGH/1)।",
+                hint: "একটি সুইচ, একটি NOT Gate এবং একটি LED ব্যবহার করুন।",
+                completed: false,
+                validator: () => {
+                    const outputs = state.components.filter(c => c.type === 'OUTPUT');
+                    const inputs = state.components.filter(c => c.type === 'INPUT');
+                    if(outputs.length === 0 || inputs.length === 0) return false;
+                    
+                    const switchComp = inputs[0];
+                    const originalState = switchComp.state.value;
+                    
+                    switchComp.state.value = 0;
+                    evaluateLogic();
+                    const test1Passed = outputs.some(o => o.state.value === 1);
+                    
+                    switchComp.state.value = 1;
+                    evaluateLogic();
+                    const test2Passed = outputs.every(o => o.state.value === 0);
+
+                    switchComp.state.value = originalState;
+                    evaluateLogic();
+
+                    return test1Passed && test2Passed;
+                }
+            },
+            {
+                id: 2,
+                title: "লেভেল ২: বিকল্প লাইটিং লজিক (OR Gate)",
+                difficulty: "সহজ",
+                difficultyClass: "text-emerald-400 bg-emerald-950 border-emerald-800",
+                points: 150,
+                desc: "২টি ইনপুট সুইচের অন্তত যেকোনো একটি ON থাকলে এলইডি লাইট জ্বলবে।",
+                hint: "২টি সুইচকে একটি OR Gate-এর সাথে যুক্ত করে সেটার আউটপুট এলইডি-তে দিন।",
+                completed: false,
+                validator: () => {
+                    const outputs = state.components.filter(c => c.type === 'OUTPUT');
+                    const inputs = state.components.filter(c => c.type === 'INPUT');
+                    if(inputs.length < 2 || outputs.length < 1) return false;
+
+                    const [s1, s2] = inputs;
+                    
+                    s1.state.value = 0; s2.state.value = 0; evaluateLogic();
+                    if(outputs[0].state.value !== 0) return false;
+
+                    s1.state.value = 1; s2.state.value = 0; evaluateLogic();
+                    if(outputs[0].state.value !== 1) return false;
+
+                    s1.state.value = 0; s2.state.value = 1; evaluateLogic();
+                    if(outputs[0].state.value !== 1) return false;
+
+                    s1.state.value = 1; s2.state.value = 1; evaluateLogic();
+                    if(outputs[0].state.value !== 1) return false;
+
+                    return true;
+                }
+            },
+            {
+                id: 3,
+                title: "লেভেল ৩: হাফ অ্যাডার তৈরি (Half Adder)",
+                difficulty: "মাঝারি",
+                difficultyClass: "text-amber-400 bg-amber-950 border-amber-800",
+                points: 250,
+                desc: "মৌলিক গেট (XOR এবং AND) ব্যবহার করে ১-বিট হাফ অ্যাডার তৈরি করুন (Sum এবং Carry আউটপুট সহ)।",
+                hint: "২টি সুইচকে সমান্তরালভাবে একটি XOR (Sum-এর জন্য) এবং একটি AND Gate-এ (Carry-এর জন্য) কানেক্ট করুন।",
+                completed: false,
+                validator: () => {
+                    const inputs = state.components.filter(c => c.type === 'INPUT');
+                    const outputs = state.components.filter(c => c.type === 'OUTPUT');
+                    if(inputs.length < 2 || outputs.length < 2) return false;
+
+                    const [inA, inB] = inputs;
+                    let pass = true;
+
+                    const testCases = [
+                        { a: 0, b: 0, sum: 0, carry: 0 },
+                        { a: 0, b: 1, sum: 1, carry: 0 },
+                        { a: 1, b: 0, sum: 1, carry: 0 },
+                        { a: 1, b: 1, sum: 0, carry: 1 }
+                    ];
+
+                    for(let tc of testCases) {
+                        inA.state.value = tc.a;
+                        inB.state.value = tc.b;
+                        evaluateLogic();
+
+                        const outValues = outputs.map(o => o.state.value);
+                        const hasSum = outValues.includes(tc.sum);
+                        const hasCarry = outValues.includes(tc.carry);
+
+                        if(!hasSum || !hasCarry) {
+                            pass = false;
+                            break;
+                        }
+                    }
+                    return pass;
+                }
+            },
+            {
+                id: 4,
+                title: "লেভেল ৪: ডিকোডার লজিক পাজল",
+                difficulty: "কঠিন",
+                difficultyClass: "text-red-400 bg-red-950 border-red-800",
+                points: 400,
+                desc: "ক্যানভাসে একটি ২-থেকে-৪ ডিকোডার মডিউল যোগ করুন এবং ৪টি এলইডি যুক্ত করে সঠিক আউটপুট নিশ্চিত করুন।",
+                hint: "Sidebar থেকে 2-to-4 Decoder যোগ করে তার ৪টি আউটপুট ৪টি আলাদা LED-তে যুক্ত করুন।",
+                completed: false,
+                validator: () => {
+                    const decoders = state.components.filter(c => c.type === 'DECODER_2TO4');
+                    const outputs = state.components.filter(c => c.type === 'OUTPUT');
+                    return decoders.length >= 1 && outputs.length >= 4;
+                }
+            }
+        ];
+
+        // Component Definitions with Port Coordinates
+        const COMPONENT_TYPES = {
+            INPUT: { title: "সুইচ", inputs: [], outputs: ["OUT"], width: 100, height: 70 },
+            OUTPUT: { title: "এলইডি", inputs: ["IN"], outputs: [], width: 100, height: 70 },
+            NOT: { title: "NOT Gate", inputs: ["IN"], outputs: ["OUT"], width: 110, height: 70 },
+            AND: { title: "AND Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            OR: { title: "OR Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            XOR: { title: "XOR Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            NAND: { title: "NAND Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            NOR: { title: "NOR Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            XNOR: { title: "XNOR Gate", inputs: ["IN 1", "IN 2"], outputs: ["OUT"], width: 120, height: 80 },
+            HALF_ADDER: { title: "Half Adder", inputs: ["A", "B"], outputs: ["SUM", "CARRY"], width: 140, height: 100 },
+            FULL_ADDER: { title: "Full Adder", inputs: ["A", "B", "Cin"], outputs: ["SUM", "Cout"], width: 150, height: 110 },
+            DECODER_2TO4: { title: "2-to-4 Decoder", inputs: ["A", "B"], outputs: ["Y0", "Y1", "Y2", "Y3"], width: 150, height: 130 },
+            ENCODER_4TO2: { title: "4-to-2 Encoder", inputs: ["I0", "I1", "I2", "I3"], outputs: ["Y0", "Y1"], width: 150, height: 130 }
+        };
+
+        function switchTab(tabName) {
+            state.activeTab = tabName;
+            ['builder', 'modules', 'tasks'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const view = document.getElementById(`view-${t}`);
+                if (t === tabName) {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-blue-600 text-white shadow-md flex items-center gap-2";
+                    view.classList.remove('hidden');
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center gap-2";
+                    view.classList.add('hidden');
+                }
+            });
+
+            if (tabName === 'modules') {
+                renderConverterBits();
+                updateLiveConverter('bit');
+            } else if (tabName === 'tasks') {
+                renderTasksList();
+            }
+        }
+
+        function addComponent(type, x = 120, y = 120) {
+            const def = COMPONENT_TYPES[type];
+            if (!def) return;
+
+            const comp = {
+                id: `comp_${state.nextId++}`,
+                type: type,
+                x: x + (state.components.length * 15) % 200,
+                y: y + (state.components.length * 15) % 200,
+                inputs: def.inputs.map(name => ({ name, value: 0 })),
+                outputs: def.outputs.map(name => ({ name, value: 0 })),
+                state: { value: 0 }
+            };
+
+            state.components.push(comp);
+            renderComponentNode(comp);
+            evaluateLogic();
+        }
+
+        function renderComponentNode(comp) {
+            const container = document.getElementById('nodes-container');
+            const def = COMPONENT_TYPES[comp.type];
+
+            const node = document.createElement('div');
+            node.id = comp.id;
+            node.className = "absolute bg-slate-900 border-2 border-slate-700 rounded-xl shadow-xl flex flex-col justify-between cursor-move group transition-colors duration-150 hover:border-blue-500";
+            node.style.left = `${comp.x}px`;
+            node.style.top = `${comp.y}px`;
+            node.style.width = `${def.width}px`;
+            node.style.minHeight = `${def.height}px`;
+
+            let headerBg = "bg-slate-800 text-slate-200";
+            if (comp.type === 'INPUT') headerBg = "bg-blue-950 text-blue-300 border-b border-blue-800";
+            if (comp.type === 'OUTPUT') headerBg = "bg-emerald-950 text-emerald-300 border-b border-emerald-800";
+
+            let nodeHTML = `
+                <div class="px-3 py-1.5 ${headerBg} rounded-t-[10px] flex justify-between items-center text-xs font-bold border-b border-slate-800">
+                    <span>${def.title}</span>
+                    <button onclick="deleteComponent('${comp.id}')" class="text-slate-500 hover:text-red-400 transition text-[10px]"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="p-2 flex-1 flex justify-between items-center relative">
+            `;
+
+            nodeHTML += `<div class="flex flex-col gap-2">`;
+            comp.inputs.forEach((inp, idx) => {
+                nodeHTML += `
+                    <div class="flex items-center gap-1.5">
+                        <div id="port-in-${comp.id}-${idx}" 
+                             onclick="handlePortClick('${comp.id}', 'input', ${idx})"
+                             class="w-3.5 h-3.5 rounded-full bg-slate-700 border-2 border-slate-500 hover:bg-blue-400 hover:scale-125 transition cursor-pointer"
+                             title="${inp.name}"></div>
+                        <span class="text-[10px] text-slate-400 font-mono">${inp.name}</span>
+                    </div>
+                `;
+            });
+            nodeHTML += `</div>`;
+
+            if (comp.type === 'INPUT') {
+                nodeHTML += `
+                    <div class="my-auto text-center">
+                        <button onclick="toggleSwitch('${comp.id}')" id="btn-${comp.id}" class="px-3 py-1 bg-slate-800 border border-slate-600 rounded-lg text-xs font-bold font-mono text-slate-300 hover:bg-blue-600 hover:text-white transition shadow">
+                            0 (OFF)
+                        </button>
+                    </div>
+                `;
+            } else if (comp.type === 'OUTPUT') {
+                nodeHTML += `
+                    <div class="my-auto text-center">
+                        <div id="led-${comp.id}" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-800 flex items-center justify-center mx-auto transition-all duration-300">
+                            <i class="fa-solid fa-lightbulb text-slate-700 text-sm"></i>
+                        </div>
+                    </div>
+                `;
+            }
+
+            nodeHTML += `<div class="flex flex-col gap-2 items-end">`;
+            comp.outputs.forEach((out, idx) => {
+                nodeHTML += `
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] text-slate-400 font-mono">${out.name}</span>
+                        <div id="port-out-${comp.id}-${idx}" 
+                             onclick="handlePortClick('${comp.id}', 'output', ${idx})"
+                             class="w-3.5 h-3.5 rounded-full bg-slate-700 border-2 border-slate-500 hover:bg-emerald-400 hover:scale-125 transition cursor-pointer"
+                             title="${out.name}"></div>
+                    </div>
+                `;
+            });
+            nodeHTML += `</div>`;
+
+            nodeHTML += `</div>`;
+            node.innerHTML = nodeHTML;
+
+            container.appendChild(node);
+            makeDraggable(node, comp);
+        }
+
+        function makeDraggable(element, comp) {
+            let posX = 0, posY = 0, mouseX = 0, mouseY = 0;
+
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                if (e.target.tagName === 'BUTTON' || e.target.id.startsWith('port-')) return;
+                e.preventDefault();
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                posX = mouseX - e.clientX;
+                posY = mouseY - e.clientY;
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                comp.x = element.offsetLeft - posX;
+                comp.y = element.offsetTop - posY;
+                element.style.left = comp.x + "px";
+                element.style.top = comp.y + "px";
+
+                renderWires();
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        function toggleSwitch(compId) {
+            const comp = state.components.find(c => c.id === compId);
+            if (!comp) return;
+
+            comp.state.value = comp.state.value === 0 ? 1 : 0;
+            const btn = document.getElementById(`btn-${compId}`);
+            if (btn) {
+                if (comp.state.value === 1) {
+                    btn.innerText = "1 (ON)";
+                    btn.className = "px-3 py-1 bg-emerald-600 border border-emerald-400 rounded-lg text-xs font-bold font-mono text-white shadow-lg shadow-emerald-900/50";
+                } else {
+                    btn.innerText = "0 (OFF)";
+                    btn.className = "px-3 py-1 bg-slate-800 border border-slate-600 rounded-lg text-xs font-bold font-mono text-slate-300 hover:bg-blue-600 hover:text-white transition shadow";
+                }
+            }
+
+            evaluateLogic();
+        }
+
+        function evaluateLogic() {
+            for (let pass = 0; pass < 5; pass++) {
+                state.components.forEach(c => {
+                    if (c.type !== 'INPUT') {
+                        c.inputs.forEach(i => i.value = 0);
+                    }
+                });
+
+                state.wires.forEach(wire => {
+                    const fromComp = state.components.find(c => c.id === wire.fromCompId);
+                    const toComp = state.components.find(c => c.id === wire.toCompId);
+
+                    if (fromComp && toComp) {
+                        let val = 0;
+                        if (fromComp.type === 'INPUT') {
+                            val = fromComp.state.value;
+                        } else {
+                            val = fromComp.outputs[wire.fromPortIdx]?.value || 0;
+                        }
+                        if (toComp.inputs[wire.toPortIdx]) {
+                            toComp.inputs[wire.toPortIdx].value = val;
+                        }
+                    }
+                });
+
+                state.components.forEach(c => {
+                    const inVals = c.inputs.map(i => i.value);
+
+                    switch (c.type) {
+                        case 'NOT':
+                            c.outputs[0].value = inVals[0] === 1 ? 0 : 1;
+                            break;
+                        case 'AND':
+                            c.outputs[0].value = (inVals[0] === 1 && inVals[1] === 1) ? 1 : 0;
+                            break;
+                        case 'OR':
+                            c.outputs[0].value = (inVals[0] === 1 || inVals[1] === 1) ? 1 : 0;
+                            break;
+                        case 'XOR':
+                            c.outputs[0].value = (inVals[0] !== inVals[1]) ? 1 : 0;
+                            break;
+                        case 'NAND':
+                            c.outputs[0].value = !(inVals[0] === 1 && inVals[1] === 1) ? 1 : 0;
+                            break;
+                        case 'NOR':
+                            c.outputs[0].value = !(inVals[0] === 1 || inVals[1] === 1) ? 1 : 0;
+                            break;
+                        case 'XNOR':
+                            c.outputs[0].value = (inVals[0] === inVals[1]) ? 1 : 0;
+                            break;
+                        case 'HALF_ADDER':
+                            c.outputs[0].value = (inVals[0] !== inVals[1]) ? 1 : 0;
+                            c.outputs[1].value = (inVals[0] === 1 && inVals[1] === 1) ? 1 : 0;
+                            break;
+                        case 'FULL_ADDER':
+                            const [a, b, cin] = inVals;
+                            c.outputs[0].value = (a ^ b ^ cin);
+                            c.outputs[1].value = ((a & b) | (cin & (a ^ b)));
+                            break;
+                        case 'DECODER_2TO4':
+                            const decVal = (inVals[0] << 1) | inVals[1];
+                            c.outputs.forEach((o, idx) => o.value = (idx === decVal) ? 1 : 0);
+                            break;
+                        case 'ENCODER_4TO2':
+                            let activeIdx = -1;
+                            for (let i = 3; i >= 0; i--) {
+                                if (inVals[i] === 1) { activeIdx = i; break; }
+                            }
+                            c.outputs[0].value = (activeIdx >= 2) ? 1 : 0;
+                            c.outputs[1].value = (activeIdx % 2 === 1) ? 1 : 0;
+                            break;
+                        case 'OUTPUT':
+                            c.state.value = inVals[0] || 0;
+                            break;
+                    }
+                });
+            }
+
+            state.components.filter(c => c.type === 'OUTPUT').forEach(c => {
+                const ledEl = document.getElementById(`led-${c.id}`);
+                if (ledEl) {
+                    if (c.state.value === 1) {
+                        ledEl.className = "w-8 h-8 rounded-full bg-emerald-500 border-2 border-emerald-300 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/80 animate-pulse";
+                        ledEl.innerHTML = `<i class="fa-solid fa-lightbulb text-white text-sm"></i>`;
+                    } else {
+                        ledEl.className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-800 flex items-center justify-center mx-auto transition-all duration-300";
+                        ledEl.innerHTML = `<i class="fa-solid fa-lightbulb text-slate-700 text-sm"></i>`;
+                    }
+                }
+            });
+
+            renderWires();
+        }
+
+        function handlePortClick(compId, portType, portIdx) {
+            if (!state.isWiring) {
+                if (portType === 'output') {
+                    state.isWiring = true;
+                    state.wireStartPort = { compId, portType, portIdx };
+                    highlightPorts(true);
+                }
+            } else {
+                if (portType === 'input' && state.wireStartPort.compId !== compId) {
+                    const exists = state.wires.some(w => 
+                        w.fromCompId === state.wireStartPort.compId &&
+                        w.fromPortIdx === state.wireStartPort.portIdx &&
+                        w.toCompId === compId &&
+                        w.toPortIdx === portIdx
+                    );
+
+                    if (!exists) {
+                        state.wires.push({
+                            id: `wire_${Date.now()}`,
+                            fromCompId: state.wireStartPort.compId,
+                            fromPortIdx: state.wireStartPort.portIdx,
+                            toCompId: compId,
+                            toPortIdx: portIdx
+                        });
+                        evaluateLogic();
+                    }
+                }
+                state.isWiring = false;
+                state.wireStartPort = null;
+                highlightPorts(false);
+            }
+        }
+
+        function highlightPorts(active) {
+            const svgPreview = document.getElementById('preview-wire');
+            if(!active && svgPreview) svgPreview.classList.add('hidden');
+        }
+
+        function getPortCoordinates(compId, portType, portIdx) {
+            const comp = state.components.find(c => c.id === compId);
+            if (!comp) return { x: 0, y: 0 };
+
+            const def = COMPONENT_TYPES[comp.type];
+            let x = comp.x;
+            let y = comp.y + 35;
+
+            if (portType === 'output') {
+                x += def.width - 10;
+                y += portIdx * 24;
+            } else {
+                x += 10;
+                y += portIdx * 24;
+            }
+
+            return { x, y };
+        }
+
+        function renderWires() {
+            const svg = document.getElementById('wire-canvas');
+            if (!svg) return;
+
+            let html = '';
+            state.wires.forEach(wire => {
+                const start = getPortCoordinates(wire.fromCompId, 'output', wire.fromPortIdx);
+                const end = getPortCoordinates(wire.toCompId, 'input', wire.toPortIdx);
+
+                const fromComp = state.components.find(c => c.id === wire.fromCompId);
+                let val = 0;
+                if (fromComp) {
+                    val = fromComp.type === 'INPUT' ? fromComp.state.value : (fromComp.outputs[wire.fromPortIdx]?.value || 0);
+                }
+
+                const dx = Math.abs(end.x - start.x) * 0.5;
+                const pathD = `M ${start.x} ${start.y} C ${start.x + dx} ${start.y}, ${end.x - dx} ${end.y}, ${end.x} ${end.y}`;
+
+                const color = val === 1 ? '#10b981' : '#475569';
+                const glow = val === 1 ? 'filter: drop-shadow(0px 0px 4px #10b981);' : '';
+
+                html += `<path d="${pathD}" stroke="${color}" stroke-width="3" fill="none" style="${glow}" />`;
+            });
+
+            svg.innerHTML = html;
+        }
+
+        function deleteComponent(compId) {
+            state.components = state.components.filter(c => c.id !== compId);
+            state.wires = state.wires.filter(w => w.fromCompId !== compId && w.toCompId !== compId);
+            const el = document.getElementById(compId);
+            if (el) el.remove();
+            evaluateLogic();
+        }
+
+        function clearCanvas() {
+            state.components = [];
+            state.wires = [];
+            document.getElementById('nodes-container').innerHTML = '';
+            renderWires();
+        }
+
+        function renderConverterBits() {
+            const container = document.getElementById('binary-bit-switches');
+            if (!container) return;
+
+            container.innerHTML = '';
+            state.converterBits.forEach((bit, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `flex-1 py-3 rounded-lg border font-mono text-lg font-bold transition shadow ${
+                    bit === 1 ? 'bg-blue-600 border-blue-400 text-white shadow-blue-900/50' : 'bg-slate-900 border-slate-700 text-slate-400'
+                }`;
+                btn.innerText = bit;
+                btn.onclick = () => {
+                    state.converterBits[idx] = state.converterBits[idx] === 1 ? 0 : 1;
+                    updateLiveConverter('bit');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateLiveConverter(source) {
+            let decVal = 0;
+            if (source === 'decimal') {
+                const inp = document.getElementById('converter-decimal-input');
+                decVal = parseInt(inp.value) || 0;
+                if (decVal < 0) decVal = 0;
+                if (decVal > 15) decVal = 15;
+                inp.value = decVal;
+
+                const binStr = decVal.toString(2).padStart(4, '0');
+                state.converterBits = binStr.split('').map(Number);
+                renderConverterBits();
+            } else {
+                const binStr = state.converterBits.join('');
+                decVal = parseInt(binStr, 2);
+                document.getElementById('converter-decimal-input').value = decVal;
+            }
+
+            document.getElementById('hex-output').innerText = `0x${decVal.toString(16).toUpperCase()}`;
+            document.getElementById('octal-output').innerText = decVal.toString(8);
+
+            renderDecoderTable(decVal);
+        }
+
+        function renderDecoderTable(activeDec) {
+            const tbody = document.getElementById('decoder-truth-table-body');
+            if (!tbody) return;
+
+            let html = '';
+            for (let i = 0; i < 4; i++) {
+                const a = (i >> 1) & 1;
+                const b = i & 1;
+                const active = (i === (activeDec % 4));
+
+                const rowBg = active ? 'bg-blue-950/80 text-white font-bold' : 'border-b border-slate-800 text-slate-400';
+
+                html += `
+                    <tr class="${rowBg}">
+                        <td class="p-2 border border-slate-800 font-mono">${a}</td>
+                        <td class="p-2 border border-slate-800 font-mono">${b}</td>
+                        <td class="p-2 border border-slate-800 font-mono ${active && (activeDec % 4 === 0) ? 'text-emerald-400' : ''}">${activeDec % 4 === 0 ? 1 : 0}</td>
+                        <td class="p-2 border border-slate-800 font-mono ${active && (activeDec % 4 === 1) ? 'text-emerald-400' : ''}">${activeDec % 4 === 1 ? 1 : 0}</td>
+                        <td class="p-2 border border-slate-800 font-mono ${active && (activeDec % 4 === 2) ? 'text-emerald-400' : ''}">${activeDec % 4 === 2 ? 1 : 0}</td>
+                        <td class="p-2 border border-slate-800 font-mono ${active && (activeDec % 4 === 3) ? 'text-emerald-400' : ''}">${activeDec % 4 === 3 ? 1 : 0}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function toggleAdderInput(type, inputKey) {
+            state.adderInputs[type][inputKey] = state.adderInputs[type][inputKey] === 1 ? 0 : 1;
+            
+            if (type === 'ha') {
+                const { a, b } = state.adderInputs.ha;
+                document.getElementById('ha-btn-a').innerText = `A = ${a}`;
+                document.getElementById('ha-btn-b').innerText = `B = ${b}`;
+                document.getElementById('ha-out-sum').innerText = `Sum (XOR) = ${a ^ b}`;
+                document.getElementById('ha-out-carry').innerText = `Carry (AND) = ${a & b}`;
+            } else {
+                const { a, b, cin } = state.adderInputs.fa;
+                document.getElementById('fa-btn-a').innerText = `A = ${a}`;
+                document.getElementById('fa-btn-b').innerText = `B = ${b}`;
+                document.getElementById('fa-btn-cin').innerText = `Cin = ${cin}`;
+                document.getElementById('fa-out-sum').innerText = `Sum = ${a ^ b ^ cin}`;
+                document.getElementById('fa-out-cout').innerText = `Cout = ${(a & b) | (cin & (a ^ b))}`;
+            }
+        }
+
+        function renderTasksList() {
+            const container = document.getElementById('tasks-list-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            TASKS.forEach(task => {
+                const card = document.createElement('div');
+                card.className = `bg-slate-900 border rounded-2xl p-5 flex flex-col justify-between shadow-xl transition hover:border-blue-500 ${task.completed ? 'border-emerald-700/60' : 'border-slate-800'}`;
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs px-2.5 py-1 rounded-full font-bold border ${task.difficultyClass}">${task.difficulty}</span>
+                            <span class="text-xs font-bold text-yellow-400 flex items-center gap-1"><i class="fa-solid fa-star"></i> +${task.points} XP</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white mb-2">${task.title}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">${task.desc}</p>
+                        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 text-[11px] text-slate-400">
+                            <strong class="text-blue-400">হিন্ট:</strong> ${task.hint}
+                        </div>
+                    </div>
+                    <div class="mt-5 flex items-center justify-between pt-3 border-t border-slate-800">
+                        ${task.completed ? 
+                            `<span class="text-xs text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> সম্পন্ন হয়েছে</span>` :
+                            `<span class="text-xs text-slate-500">এখনো সম্পূর্ণ হয়নি</span>`
+                        }
+                        <button onclick="startTask(${task.id})" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-play"></i> ${task.completed ? 'পুনরায় চেষ্টা করুন' : 'মিশন শুরু করুন'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function startTask(taskId) {
+            const task = TASKS.find(t => t.id === taskId);
+            if (!task) return;
+
+            state.activeTaskId = taskId;
+            switchTab('builder');
+
+            const bar = document.getElementById('task-active-bar');
+            document.getElementById('active-task-title').innerText = task.title;
+            document.getElementById('active-task-desc').innerText = task.desc;
+            bar.classList.remove('hidden');
+
+            clearCanvas();
+        }
+
+        function verifyActiveTask() {
+            const task = TASKS.find(t => t.id === state.activeTaskId);
+            if (!task) return;
+
+            const passed = task.validator();
+            if (passed) {
+                if (!task.completed) {
+                    task.completed = true;
+                    state.userScore += task.points;
+                    document.getElementById('user-score').innerText = `${state.userScore} XP`;
+                }
+                alert(`অভিনন্দন! 🎉\n\nআপনি "${task.title}" সফলভাবে সম্পন্ন করেছেন! +${task.points} XP অর্জিত হয়েছে।`);
+                cancelActiveTask();
+            } else {
+                alert(`দুঃখিত! ❌\n\nসার্কিটটি সঠিক ফলাফল দিচ্ছে না। ইনপুট-আউটপুট লজিক এবং সংযোগগুলো পুনরায় যাচাই করুন।`);
+            }
+        }
+
+        function cancelActiveTask() {
+            state.activeTaskId = null;
+            document.getElementById('task-active-bar').classList.add('hidden');
+        }
+
+        function zoomCanvas(delta) {
+            state.zoomLevel = Math.max(0.6, Math.min(1.5, state.zoomLevel + delta));
+            document.getElementById('nodes-container').style.transform = `scale(${state.zoomLevel})`;
+            document.getElementById('nodes-container').style.transformOrigin = '0 0';
+        }
+
+        function resetZoom() {
+            state.zoomLevel = 1.0;
+            document.getElementById('nodes-container').style.transform = `scale(1)`;
+        }
+
+        window.onload = function() {
+            addComponent('INPUT', 80, 100);
+            addComponent('NOT', 240, 100);
+            addComponent('OUTPUT', 420, 100);
+
+            setTimeout(() => {
+                state.wires.push({
+                    id: `wire_demo_1`,
+                    fromCompId: state.components[0].id,
+                    fromPortIdx: 0,
+                    toCompId: state.components[1].id,
+                    toPortIdx: 0
+                });
+                state.wires.push({
+                    id: `wire_demo_2`,
+                    fromCompId: state.components[1].id,
+                    fromPortIdx: 0,
+                    toCompId: state.components[2].id,
+                    toPortIdx: 0
+                });
+                evaluateLogic();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
+
+  <script>
+    
+  </script>
+</body>
+</html>
